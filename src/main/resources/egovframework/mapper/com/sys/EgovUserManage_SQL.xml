@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="userManage">
+
+    <select id="selectUserList_S" resultType="egovMap">
+    SELECT
+        USER_ID          uniqId,
+        USER_ID          userId,
+        USER_NM          userNm,
+        EMAIL_ADRES      emailAdres,
+        MBTLNUM          moblphonNo,
+        GROUP_ID         groupId,
+        USER_STTUS_CODE  sttus,
+        DATE_FORMAT(SBSCR_DE, '%Y.%m.%d') sbscrbDe
+    FROM    IPD_MBER
+        <if test="searchKeyword != null and searchKeyword neq '' ">
+        WHERE
+        <if test="searchCondition == 0">
+            USER_ID LIKE #{searchKeyword}
+        </if>
+        <if test="searchCondition == 1">
+            USER_NM LIKE '%' #{searchKeyword} '%'
+        </if>
+        </if>
+        
+        ORDER BY SBSCR_DE DESC
+        LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+    </select>
+    
+    <select id="selectUserListTotCnt_S" resultType="int">
+            SELECT COUNT(1) totcnt
+            FROM( SELECT * FROM IPD_MBER ) A
+            <if test="searchKeyword != null and searchKeyword != '' ">
+            WHERE
+            <if test="searchCondition == 0">
+                USER_ID LIKE #{searchKeyword}
+            </if>
+            <if test="searchCondition == 1">
+                USER_NM LIKE '%' #{searchKeyword} '%'
+            </if>
+            </if>
+    </select>
+    
+    <insert id="insertUser_S">
+            INSERT INTO IPD_MBER 
+                (   USER_ID             ,
+                    USER_NM           ,
+                    PASSWORD            ,
+                    MBTLNUM         ,
+                    EMAIL_ADRES         ,
+                    GROUP_ID            ,
+                    USER_STTUS_CODE       )
+            VALUES (
+                    #{emplyrId}          ,
+                    #{emplyrNm}          ,
+                    #{password}          ,
+                    #{moblphonNo}        ,
+                    #{emailAdres}        ,
+                    #{groupId}           ,
+                    #{emplyrSttusCode}    )
+    </insert>
+    
+    <delete id="deleteUser_S">
+            DELETE FROM IPD_MBER 
+            WHERE USER_ID=#{delId}
+    </delete>
+    
+    <select id="selectUser_S" resultType="egovframework.ippado.sys.user.service.UserManageVO">
+            SELECT
+            USER_ID         uniqId            ,
+            USER_ID         emplyrId          ,
+            USER_NM         emplyrNm          ,
+            PASSWORD        password          ,
+            MBTLNUM         moblphonNo        ,
+            EMAIL_ADRES     emailAdres        ,
+            (select b.AUTHOR_CODE from IPD_MBER_AUTHOR b where b.SCRTY_DTRMN_TRGET_ID = a.USER_ID)        groupId           ,
+            USER_STTUS_CODE emplyrSttusCode    
+        FROM IPD_MBER a
+            WHERE USER_ID=#{uniqId}
+    </select>
+    
+    <update id="updateUser_S">
+            UPDATE IPD_MBER 
+            SET USER_ID           = #{emplyrId}        , 
+                USER_NM           = #{emplyrNm}        ,
+                MBTLNUM         = #{moblphonNo}      ,
+                EMAIL_ADRES         = #{emailAdres}      ,
+                GROUP_ID            = #{groupId}         ,
+                USER_STTUS_CODE   = #{emplyrSttusCode}
+            WHERE USER_ID = #{uniqId}
+    </update>
+    
+    <insert id="insertUserHistory_S">
+        
+            INSERT INTO IPD_MBER_HISTORY 
+                (   USER_ID           ,
+                    MBTLNUM         ,
+                    EMAIL_ADRES         ,
+                    GROUP_ID            ,
+                    USER_STTUS_CODE   ,
+                    CHANGE_DE           )
+            SELECT 
+                    USER_ID           ,
+                    MBTLNUM         ,
+                    EMAIL_ADRES         ,
+                    GROUP_ID            ,
+                    USER_STTUS_CODE   ,
+                    now()
+            FROM IPD_MBER
+            WHERE USER_ID = #{uniqId}
+        
+    </insert>
+    
+    <select id="checkIdDplct_S" resultType="int">
+        
+            SELECT COUNT(1) usedCnt
+            FROM   IPD_MBER
+            WHERE  USER_ID = #{checkId}
+        
+    </select>
+    
+    <update id="updatePassword_S">
+            UPDATE IPD_MBER 
+            SET    PASSWORD   =  #{password}
+            WHERE  USER_ID  = #{uniqId}
+    </update>
+    
+    <select id="selectPassword_S" resultType="egovframework.ippado.sys.user.service.UserManageVO">
+            SELECT  PASSWORD          password 
+            FROM    IPD_MBER
+            WHERE   USER_ID=#{uniqId}
+        
+    </select>
+</mapper>

@@ -1,0 +1,24 @@
+승선 (EMBARKATION, EMBRK)
+ - 승선ID (EMBRK_ID), [운항ID (NVG_ID)],  [고객ID (CSTMR_ID)], [요금ID (CHRGE_ID)], 그룹여부 (GRP_YN), 소인YN (CHIL_YN), 주민YN (INHBTNT_YN), 지불금 (PYMNTMNY), 출력여부 (PRNTNG_YN), 완료YN
+ 
+고객(CUSTOMER, CSTMR)  
+ - 고객ID (CSTMR_ID), (성명 CSTMR_NM), (성별 SEXDSTN), 생년월일(BRTHDY), 연락처(CTTPC), 비고 (REMARK)
+
+운항(NAVIGATION, NVG)
+ - 운항ID (NVG_ID), [출발지:항구 (START_PORT)], [도착지:항구 (ARVL_PORT)], 출발일시 (START_DT), [운항구분 (NVG_DIV)]
+
+요금(CHARGE, CHRGE)
+ - 요금ID (CHRGE_ID), 요금명(CHRGE_NM), [운항ID (NVG_ID)], 금액 (AMOUNT), 요금구분(일반,특별) (CHRGE_DIV), 요금시작일 (CHRGE_BGNDE), 요금종료일 (CHRGE_ENDDE)
+
+  
+시스템관리
+ - 사용자 : 관리자, 선장, 접수원
+ - 권한 : 권한 
+ - 코드 
+   *선박 : 유성1호
+   *항구 : 궁평항, 국화도, 입파도
+   *운항구분 : 비수기 평일, 성수기 평일, 비수기 주말, 성수기 주말, 특별 운항
+   
+ - 출력관리 : 항목, 출력 위치
+
+ 

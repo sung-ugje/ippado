@@ -1,0 +1,11 @@
+eclipse.preferences.version=1
+encoding//doc/ippado_ddl_mariadb.sql=UTF-8
+encoding//src/main/java=UTF-8
+encoding//src/main/webapp/WEB-INF/jsp/cop/bbs/EgovBoardMstrList.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/jsp/cop/bbs/EgovNoticeReply.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/jsp/cop/bbs/EgovNoticeUpdt.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/jsp/cop/com/EgovBoardUseInfInqire.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/jsp/cop/com/EgovBoardUseInfRegist.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/jsp/sec/gmt/EgovGroupManage.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/jsp/sys/code/ClCodeDetail.jsp=UTF-8
+encoding//src/test/java=UTF-8

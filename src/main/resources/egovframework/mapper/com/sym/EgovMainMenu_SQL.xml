@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="menuManage">
+	
+	<select id="selectMainMenuHead" parameterType="egovframework.ippado.sys.menu.service.MenuManageVO" resultType="egovMap">
+		 
+            SELECT
+			      B.MENU_NO AS menuNo
+				, B.MENU_ORDR AS menuOrdr
+				, B.MENU_NM AS menuNm
+				, B.UPPER_MENU_NO AS upperMenuId
+				, B.MENU_DC AS menuDc
+				, B.RELATE_IMAGE_PATH AS relateImagePath
+				, B.RELATE_IMAGE_NM AS relateImageNm
+				, B.PROGRM_FILE_NM AS progrmFileNm
+				, (SELECT C.URL FROM IPD_PROGRMS C WHERE B.PROGRM_FILE_NM = C.PROGRM_FILE_NM) AS chkURL
+			FROM IPD_MENU_AUTHOR A, IPD_MENUS B 
+			WHERE  B.Menu_NO > 0 
+			AND    B.UPPER_MENU_NO = 0  
+			AND    A.MENU_NO  = B.MENU_NO 
+			AND    A.AUTHOR_CODE = (SELECT C.AUTHOR_CODE from IPD_MBER_AUTHOR C
+	                                WHERE  C.SCRTY_DTRMN_TRGET_ID = #{tmp_UniqId})
+			ORDER BY MENU_ORDR
+		 
+	</select>
+
+	<select id="selectMainMenuLeft" parameterType="egovframework.ippado.sys.menu.service.MenuManageVO" resultType="egovMap">
+		 
+			SELECT
+			       B.MENU_NO AS menuNo
+				 , B.MENU_ORDR AS menuOrdr
+				 , B.MENU_NM AS menuNm
+				 , B.UPPER_MENU_NO AS upperMenuId
+				 , B.RELATE_IMAGE_PATH AS relateImagePath
+				 , B.RELATE_IMAGE_NM AS relateImageNm
+				 , (SELECT C.URL FROM IPD_PROGRMS C WHERE B.PROGRM_FILE_NM = C.PROGRM_FILE_NM) AS chkURL	
+			FROM   IPD_MENU_AUTHOR A, IPD_MENUS B
+			WHERE  A.MENU_NO  = B.MENU_NO 
+			AND    A.AUTHOR_CODE = (SELECT AUTHOR_CODE from IPD_MBER_AUTHOR
+	                                WHERE  SCRTY_DTRMN_TRGET_ID = #{tmp_UniqId})
+			ORDER BY B.MENU_ORDR
+		 
+	</select>
+
+	<select id="selectLastMenuURL" parameterType="egovframework.ippado.sys.menu.service.MenuManageVO" resultType="String">
+		 
+			SELECT URL 
+			FROM   IPD_PROGRMS
+			WHERE  PROGRM_FILE_NM =
+			       (SELECT PROGRM_FILE_NM FROM IPD_MENUS
+				    WHERE MENU_NO = #{menuNo})
+		 
+	</select>
+
+	<select id="selectLastMenuNo" parameterType="egovframework.ippado.sys.menu.service.MenuManageVO" resultType="int">
+		 
+			select MIN(MENU_NO) 
+			from   IPD_MENUS
+			where  UPPER_MENU_NO = #{menuNo}
+			and    MENU_ORDR =
+			      (select MIN(MENU_ORDR) 
+			       from IPD_MENU_AUTHOR A, IPD_MENUS B
+			       where A.MENU_NO = B.MENU_NO
+			       AND   A.AUTHOR_CODE = (SELECT AUTHOR_CODE from IPD_MBER_AUTHOR
+	                                      WHERE  SCRTY_DTRMN_TRGET_ID = #{tempValue})
+			       AND   B.UPPER_MENU_NO = #{menuNo})
+		 
+	</select>
+
+	<select id="selectLastMenuNoCnt" parameterType="egovframework.ippado.sys.menu.service.MenuManageVO" resultType="int">
+		 
+			select count(MENU_NO) 
+			from   IPD_MENUS
+			where  UPPER_MENU_NO = #{menuNo}
+			and    MENU_ORDR =
+			      (select MIN(MENU_ORDR) 
+			       from IPD_MENU_AUTHOR A, IPD_MENUS B
+			       where A.MENU_NO = B.MENU_NO
+			       AND   A.AUTHOR_CODE = (SELECT AUTHOR_CODE from IPD_MBER_AUTHOR
+	                                      WHERE  SCRTY_DTRMN_TRGET_ID = #{tempValue})
+			       AND   B.UPPER_MENU_NO = #{menuNo})
+		 
+	</select>
+</mapper>
